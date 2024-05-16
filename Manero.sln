@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manero", "Manero\Manero\Manero.csproj", "{F9ABF42D-17F3-4E1B-AE2F-395DB377C0C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manero", "Manero\Manero\Manero.csproj", "{F9ABF42D-17F3-4E1B-AE2F-395DB377C0C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Manero.Client", "Manero\Manero.Client\Manero.Client.csproj", "{4B578A99-EA7E-4D13-988E-1F02C2D27F69}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Manero.Client", "Manero\Manero.Client\Manero.Client.csproj", "{4B578A99-EA7E-4D13-988E-1F02C2D27F69}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

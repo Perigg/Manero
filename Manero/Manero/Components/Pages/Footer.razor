@@ -1,25 +1,4 @@
-﻿@inherits LayoutComponentBase
-@inject NavigationManager NavigationManager
-
-
-<div class="container mt-3">
-    <nav class="my-4">
-        <NavLink class="btn btn-menu mx-1" href="/"></NavLink>
-        <h3 class="header-title">Manero</h3>
-        <NavLink class="btn btn-cart mx-1" href="/cart"></NavLink>
-    </nav>
-
-
-
-</div>
-
-
-
-@Body
-
-@if (ShouldShowFooter())
-{
-    
+﻿@page "/footer"
 
 <footer class="footer fixed-bottom bg-light">
     <div class="container-fluid">
@@ -58,20 +37,5 @@
         <hr class="footer-line" style="height: 4px; background-color: #343a40; border: none; width: 20%;">
     </div>
 </footer>
-}
 
 
-@code {
-    bool ShouldShowFooter()
-    {
-        // Logic to determine whether to show the footer based on the current page or route
-        // For example:
-        return NavigationManager.Uri.Contains("/") || NavigationManager.Uri.Contains("/Mom");
-    }
-}
-
-@* <div id="blazor-error-ui">
-    An unhandled error has occurred.
-    <a href="" class="reload">Reload</a>
-    <a class="dismiss">🗙</a>
-</div> *@
