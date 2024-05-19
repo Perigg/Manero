@@ -1,0 +1,30 @@
+﻿@page "/address-success"
+@rendermode InteractiveServer
+@inject IJSRuntime JSRuntime
+@inject HttpClient Http
+@inject NavigationManager NavigationManager;
+
+
+@code {
+	void NavigateHome() {
+		NavigationManager.NavigateTo("/list-address");
+	}
+}
+
+<PageTitle>Success!</PageTitle>
+
+<div class="wrapper">
+	<div class="container" id="success-page">
+		<div class="success-image">
+			<img id="green-tick" src="https://cdn2.iconfinder.com/data/icons/greenline/512/check-512.png" />
+		</div>
+		<div class="success-prompt">
+			<h4>Address added</h4>
+			<p>Your address was successfully added! Let's go shopping!</p>
+		</div>
+		<button class="btn" id="back-to-card-list-button" @onclick="NavigateHome">Go Back</button>
+
+	</div>
+
+
+</div>

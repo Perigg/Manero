@@ -1,13 +1,24 @@
-@import 'scss/_mixins.scss';
-@import 'scss/_variables.scss';
-@import 'scss/_typography.scss';
-@import 'scss/_containers';
-@import 'scss/_buttons';
-@import 'scss/_links';
-@import 'scss/_forms';
-@import 'scss/_alerts.scss';
-@import 'scss/_images.scss';
+@import './scss/_mixins';
+@import './scss/_variables';
+@import './scss/_typography.scss';
+@import './scss/_containers';
+@import './scss/_buttons';
+@import './scss/_links';
+@import './scss/_forms';
+@import './scss/_alerts.scss';
+@import './scss/_images.scss';
+@import 'scss/_backtitle.scss';
+@import 'scss/_creditcard.scss';
+@import 'scss/_label.scss';
+@import 'scss/_swiper.scss';
 
 h1:focus {
     outline: none;
+}
+
+input[type="text"] {
+    margin: 0px 0;
+    padding: 10px;
+    width: calc(100% - 22px);
+    display: block;
 }
