@@ -1,1 +1,62 @@
-﻿
+﻿.add-new-card-option {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: flex-end;
+}
+
+.add-new-card-detail {
+    display: flex;
+    align-items: flex-start;
+}
+
+#card-details-input {
+    max-width: 600px;
+}
+
+.input-error-shake {
+    animation: shake 0.82s cubic-bezier(.36,.07,.19,.97) both;
+    animation-iteration-count: 1;
+}
+
+.input-error-pulse {
+    animation: pulse 1s infinite;
+}
+
+.error-message {
+    color: red;
+    font-size: 0.8rem;
+    margin-top: 2px;
+}
+
+@keyframes shake {
+    10%, 90% {
+        transform: translateX(-1px);
+    }
+
+    20%, 80% {
+        transform: translateX(2px);
+    }
+
+    30%, 50%, 70% {
+        transform: translateX(-4px);
+    }
+
+    40%, 60% {
+        transform: translateX(4px);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(204,169,44, 0.4);
+    }
+
+    70% {
+        box-shadow: 0 0 0 10px rgba(204,169,44, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(204,169,44, 0);
+    }
+}

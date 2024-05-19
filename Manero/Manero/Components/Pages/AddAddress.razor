@@ -1,0 +1,102 @@
+﻿@page "/add-address"
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
+
+<PageTitle>Add address</PageTitle>
+
+<div class="wrapper">
+	<div class="container" id="card-details-input">
+		<div class="page-title">
+			<div class="back-arrow" @onclick="GoToAddressList">
+				<p>&lt;</p>
+			</div>
+			<div class="title-text">
+				<p>Add a new card</p>
+			</div>
+			<div class="back-arrow spacer">&lt;</div>
+		</div>
+
+		@if (!string.IsNullOrEmpty(ErrorMessage)) {
+			<div class="alert alert-danger">
+				@ErrorMessage
+
+			</div>
+
+		}
+
+		<EditForm Model="Form" FormName="AddAddress" OnSubmit="HandleSubmit" novalidate>
+			<DataAnnotationsValidator />
+			<div class="form-group mb-3">
+				<label class="form-label">Name</label>
+				<InputText @bind-Value="Form.HolderName" placeholder="Enter name" class="form-control" />
+				<ValidationMessage For="@(() => Form.HolderName)" />
+			</div>
+			<div class="form-group mb-3">
+				<label class="form-label">Address</label>
+				<InputText @bind-Value="Form.AddressOne" placeholder="Enter street name" class="form-control" />
+				<ValidationMessage For="@(() => Form.AddressOne)" />
+			</div>
+			<div class="form-group mb-3">
+				<label class="form-label">Second Address</label>
+				<InputText @bind-Value="Form.AddressTwo" placeholder="C/O" class="form-control" />
+				<ValidationMessage For="@(() => Form.AddressTwo)" />
+			</div>
+			<div class="form-group mb-3">
+				<label class="form-label">Postal Code</label>
+				<InputText @bind-Value="Form.PostalCode" placeholder="Enter postal code" class="form-control" />
+				<ValidationMessage For="@(() => Form.PostalCode)" />
+			</div>
+			<div class="form-group mb-3">
+				<label class="form-label">City</label>
+				<InputText @bind-Value="Form.City" placeholder="Enter city" class="form-control" />
+				<ValidationMessage For="@(() => Form.City)" />
+			</div>
+			<div class="form-group mb-3">
+				<label class="form-label">Country</label>
+				<InputText @bind-Value="Form.Country" placeholder="Enter country" class="form-control" />
+				<ValidationMessage For="@(() => Form.Country)" />
+			</div>
+			<button type="submit" class="btn btn-secondary">Confirm</button>
+		</EditForm>
+
+
+	</div>
+
+</div>
+
+
+
+
+@code {
+	private AddressForm Form = new AddressForm();
+	private string ErrorMessage = "";
+
+	private async Task HandleSubmit() {
+		ErrorMessage = "";
+		if (InputValidator(Form)) {
+			Form.HolderId = 1;
+			var response = await Http.PostAsJsonAsync("api/create-address?code=lDSssG-lsuAtK5pflzzASsUpgWVrEtgfCIcs7TdXV-V0AzFuuzAhtw==", Form);
+			if (response.IsSuccessStatusCode) {
+				NavigationManager.NavigateTo("/address-success");
+			} else {
+				ErrorMessage = "An error occurred while registering your address. Please try again";
+				NavigationManager.NavigateTo("/address-failure");
+			}
+		} else {
+			ErrorMessage = "Please fill in the form correctly";
+		}
+	}
+
+	private bool InputValidator(AddressForm form) {
+		return !string.IsNullOrWhiteSpace(form.HolderName) &&
+		!string.IsNullOrWhiteSpace(form.AddressOne) &&
+		!string.IsNullOrWhiteSpace(form.PostalCode) &&
+		!string.IsNullOrWhiteSpace(form.City) &&
+		!string.IsNullOrWhiteSpace(form.Country);
+	}
+
+	private void GoToAddressList() {
+		NavigationManager.NavigateTo("/list-address");
+	}
+}
