@@ -1,0 +1,5 @@
+﻿
+/* Ta bort nedåtpilen från dropdown */
+.nav-item.dropdown .dropdown-toggle::after {
+    display: none;
+}
