@@ -1,0 +1,36 @@
+﻿@inject NavigationManager navManager
+@page "/"
+
+
+<PageTitle>Home1</PageTitle>
+
+
+<div class="container-fluid d-flex justify-content-center align-items-center custom-container">
+    <div class="rounded-circle position-absolute custom-circle">
+        <div class="position-absolute custom-inner-circle"></div>
+        <div class="position-absolute custom-outer-circle"></div>
+    </div>
+    <h1 class="position-absolute custom-heading">MANERO</h1>
+</div>
+
+
+
+@code {
+
+    protected override async Task OnInitializedAsync()
+    {
+        navManager.NavigateTo("/welcome2");
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            Console.WriteLine("tja");
+            await Task.Delay(3000);
+            navManager.NavigateTo("/Welcome2");
+
+        }
+
+    }
+}

@@ -1,0 +1,359 @@
+﻿
+.custom-container {
+    background-color: #DBE3F5;
+    height: 100vh;
+    position: relative;
+}
+
+.custom-circle {
+    width: 100px;
+    height: 100px;
+    background-color: white;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+}
+
+.custom-inner-circle {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 35px;
+    height: 35px;
+}
+
+.custom-outer-circle {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 135px;
+    height: 135px;
+    border: 4px solid white;
+    border-radius: 50%;
+}
+
+.custom-heading {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    font-size: 35px;
+    position: absolute;
+}
+
+
+.custom-container2 {
+    background-color: #DBE3F5;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
+
+.custom-circle2 {
+    width: 440px;
+    height: 440px;
+    background-color: white;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    position: absolute;
+}
+
+.custom-inner-circle2 {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90px;
+    height: 90px;
+}
+
+.custom-outer-circle2 {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    height: 500px;
+    border: 5px solid white;
+    border-radius: 50%;
+}
+
+.custom-text2 {
+    font-size: 35px;
+    text-align: center;
+    position: absolute;
+    top: 33%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    line-height: 1.1;
+}
+
+.custom-bold2 {
+    font-weight: bold;
+}
+
+.custom-gray2 {
+    font-size: 15px;
+    color: gray;
+}
+
+.custom-button-container2 {
+    position: absolute;
+    bottom: 120px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.custom-btn2 {
+    font-size: 13px;
+    height: 45px;
+    width: 220px;
+    border-radius: 30px;
+    background-color: black;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+}
+
+.custom-page-indicators2 {
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+}
+
+.custom-dot-empty2 {
+    width: 15px;
+    height: 6px;
+    border: 1.7px solid black;
+    border-radius: 3px;
+    margin-right: 10px;
+}
+
+.custom-dot-filled2 {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background-color: black;
+    margin-right: 10px;
+}
+
+.custom-horizontal-line2 {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 35%;
+    height: 5px;
+    background-color: black;
+    border-radius: 30px;
+}
+
+
+.custom-container3 {
+    background-color: #DBE3F5;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
+
+.custom-circle3 {
+    width: 440px;
+    height: 440px;
+    background-color: white;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    position: absolute;
+}
+
+.custom-inner-circle3 {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90px;
+    height: 90px;
+}
+
+.custom-outer-circle3 {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    height: 500px;
+    border: 5px solid white;
+    border-radius: 50%;
+}
+
+.custom-text3 {
+    font-size: 35px;
+    font-weight: bold;
+    text-align: center;
+    position: absolute;
+    top: 33%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    line-height: 1.1;
+}
+
+.custom-button-container3 {
+    position: absolute;
+    bottom: 120px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.custom-btn3 {
+    font-size: 13px;
+    height: 45px;
+    width: 220px;
+    border-radius: 30px;
+    background-color: black;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+}
+
+.custom-page-indicators3 {
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+}
+
+.custom-dot-filled3 {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background-color: black;
+    margin-right: 10px;
+}
+
+.custom-dot-empty3 {
+    width: 15px;
+    height: 6px;
+    border: 1.7px solid black;
+    border-radius: 3px;
+    margin-right: 10px;
+}
+
+.custom-horizontal-line3 {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 35%;
+    height: 5px;
+    background-color: black;
+    border-radius: 30px;
+}
+
+.custom-container4 {
+    background-color: #DBE3F5;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
+
+.custom-circle4 {
+    width: 440px;
+    height: 440px;
+    background-color: white;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    position: absolute;
+}
+
+.custom-inner-circle4 {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90px;
+    height: 90px;
+}
+
+.custom-outer-circle4 {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 500px;
+    height: 500px;
+    border: 5px solid white;
+    border-radius: 50%;
+}
+
+.custom-text4 {
+    font-size: 35px;
+    font-weight: bold;
+    text-align: center;
+    position: absolute;
+    top: 33%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    line-height: 1.1;
+}
+
+.custom-button-container4 {
+    position: absolute;
+    bottom: 120px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.custom-btn4 {
+    font-size: 13px;
+    height: 45px;
+    width: 220px;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.custom-page-indicators4 {
+    position: absolute;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+}
+
+.custom-dot-filled4 {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background-color: black;
+    margin-right: 10px;
+}
+
+.custom-dot-empty4 {
+    width: 15px;
+    height: 6px;
+    border: 1.7px solid black;
+    border-radius: 3px;
+    margin-right: 10px;
+}
+
+.custom-horizontal-line4 {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 35%;
+    height: 5px;
+    background-color: black;
+    border-radius: 30px;
+}
