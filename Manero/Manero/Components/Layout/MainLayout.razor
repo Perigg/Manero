@@ -104,9 +104,9 @@
 @code {
     bool ShouldShowFooter()
     {
-        // Logic to determine whether to show the footer based on the current page or route
-        // For example:
-        return NavigationManager.Uri.Contains("/") || NavigationManager.Uri.Contains("/Mom");
+        return NavigationManager.Uri.Contains("/") || NavigationManager.Uri.Contains("/mom")
+        || NavigationManager.Uri.Contains("/add-address") || NavigationManager.Uri.Contains("/list-address")
+        || NavigationManager.Uri.Contains("/list-cards");
     }
 }
 

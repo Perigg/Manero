@@ -1,4 +1,5 @@
 using Manero.Components;
+using Manero.Registrations;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +13,12 @@ builder.Services.AddScoped(sp => new HttpClient
     BaseAddress = new Uri("https://cardprovider.azurewebsites.net/")
 });
 
-//builder.Services.AddServiceRegistrations(builder.Configuration); Extensions etc..
+builder.Services.AddScoped(sp => new HttpClient
+{
+	BaseAddress = new Uri("https://addressprovider.azurewebsites.net/")
+});
+
+builder.Services.AddServiceRegistrations(builder.Configuration);
 builder.Services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
 
 builder.Logging.AddConsole();

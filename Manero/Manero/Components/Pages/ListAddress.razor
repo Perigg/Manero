@@ -1,0 +1,127 @@
+﻿@page "/list-address"
+@rendermode InteractiveServer
+@inject IJSRuntime JSRuntime
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+<PageTitle>Addresses</PageTitle>
+
+<div class="wrapper">
+    <div class="container" id="card-details-input">
+        <div class="page-title">
+            <div class="back-arrow">
+                <p>&lt;</p>
+            </div>
+            <div class="title-text">
+                <p>Your addresses</p>
+            </div>
+            <div class="back-arrow spacer">&lt;</div>
+        </div>
+        <div class="add-new-card-option">
+            <p style="-webkit-text-stroke-width: medium">Addresses</p>
+            <div class="add-new-card-detail">
+                <div><p>New address</p></div>
+                <div style="margin-left: 2px"><button class="button-options" @onclick="GoToAddAddressPage"><img class="button-image" src="https://www.svgrepo.com/show/522230/plus-circle.svg" /></button></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-stats-and-button">
+        @foreach (var address in InteractiveAddresses) {
+            <div @onclick="() => HighlightCard((int)address.AddressId!)" class="part-of-csab">
+                
+                @if (!address.ShowOptions) {
+                    <div>@address.AddressOne</div>
+                    <button @onclick="() => ToggleOptions((int)address.AddressId!)" class="button-options"><img class="button-image" src="https://cdn-icons-png.freepik.com/512/176/176328.png" /></button>
+                }
+                @if (address.ShowOptions) {
+                    <div>
+                        <p>@address.HolderName</p>    
+                        <p>@address.AddressOne</p>
+                    </div>
+                    <div>
+                        <button class="button-options"><img class="button-image" src="https://cdn-icons-png.freepik.com/512/4083/4083831.png" /></button>
+                        <button @onclick="() => ToggleOptions((int)address.AddressId!)" class="button-options"><img class="button-image" src="https://cdn-icons-png.freepik.com/512/1632/1632708.png" /></button>
+                    </div>
+                }
+            </div>
+        }
+        <span></span>
+    </div>
+
+</div>
+
+@code {
+    List<FormModel> AddressesRetrieved = new List<FormModel>();
+    List<InteractiveAddress> InteractiveAddresses = new List<InteractiveAddress>();
+
+    int activeAddress = 1;
+
+    void GoToAddAddressPage() {
+        NavigationManager.NavigateTo("/add-address");
+    }
+
+    void HighlightCard(int id) {
+        activeAddress = id;
+        StateHasChanged();
+    }
+
+    private async Task LoadAllAddresses() {
+        var requestBody = new { Id = 1 };
+        
+        try {
+            var response = await Http.PostAsJsonAsync("/api/read-addresses?code=wgjz6wBjMB1xqdCnRthHF-7p9YpKz-p1dCtht1DSjixeAzFumBUvoA==", requestBody);
+            if (response.IsSuccessStatusCode) {
+                var AddressesRetrieved = await response.Content.ReadFromJsonAsync<List<FormModel>>();
+                if (AddressesRetrieved != null && AddressesRetrieved.Count != 0) {
+                    await MapAddressModelToInteractive(AddressesRetrieved);
+                    StateHasChanged();
+                } else {
+                    Console.WriteLine("No addresses available");
+                }
+            } else {
+                // Handle errors or issues here
+                Console.WriteLine("Failed to load addresses");
+            }
+
+        }
+        catch (Exception ex) {
+            Console.WriteLine($"An error occurred: {ex.Message}");
+        }
+    }
+
+    private async Task MapAddressModelToInteractive(List<FormModel> adressmodels) {
+        adressmodels.ForEach(ad => InteractiveAddresses.Add(new InteractiveAddress
+            {
+                AddressId = (int)ad.AddressId,
+                HolderId = ad.HolderId,
+                HolderName = ad.HolderName,
+                AddressOne = ad.AddressOne,
+                AddressTwo = ad.AddressTwo,
+                PostalCode = ad.PostalCode,
+                City = ad.City,
+                Country = ad.Country,
+                RefreshState = 0,
+                ShowOptions = false
+            }));
+    }
+
+    public class ApiResponse
+    {
+        public List<FormModel>? Value { get; set; }
+        //public int StatusCode { get; set; } // Optionally capture more properties as needed
+    }
+
+    protected override async void OnInitialized() {
+        await LoadAllAddresses();
+    }
+
+    void ToggleOptions(int id) {
+        var address = InteractiveAddresses.FirstOrDefault(c => c.AddressId == id);
+        if (address != null) {
+            address.ShowOptions = !address.ShowOptions;
+            StateHasChanged();
+            address.RefreshState++;
+        }
+    }
+}

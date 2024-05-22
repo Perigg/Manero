@@ -1,0 +1,38 @@
+﻿.swiper-container {
+    width: 300px;
+    display: flex;
+    margin: auto;
+}
+
+.swiper-slide-active {
+}
+
+.part-of-csab {
+    margin-bottom: 2vh;
+    border-bottom: 2px solid black;
+    background-color: azure;
+    min-width: 300px;
+    padding: 1vh;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.swiper-slide {
+    text-align: center;
+    font-size: 18px;
+    background: #fff;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+}
+
+.swiper-slide-next {
+}
