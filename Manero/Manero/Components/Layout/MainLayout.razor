@@ -2,6 +2,7 @@
 @inject NavigationManager NavigationManager
 
 
+@if (!ShouldHideFooter()){
 <style>
     /* Ta bort nedåtpilen från dropdown */
     .nav-item.dropdown .dropdown-toggle::after {
@@ -10,29 +11,30 @@
 
 </style>
 
-<div class="container-fluid mt-3">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="row w-100">
-            <!-- Navigationslänkar till vänster -->
-            <div class="col-4 d-flex align-items-center">
-                <div class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
-                        <i class="bi bi-list"></i>
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color: #f8f9fa;">
-                        <li><NavLink class="dropdown-item" href="/home">Home</NavLink></li>
-                        <li><NavLink class="dropdown-item" href="/products">Products</NavLink></li>
-                        <li><NavLink class="dropdown-item" href="/profile">Profile</NavLink></li>
-                        <li><NavLink class="dropdown-item" href="/wishlist">Wishlist</NavLink></li>
-                        <li><NavLink class="dropdown-item" href="/orders">Orders</NavLink></li>
-                    </ul>
+    <div class="container-fluid mt-3">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="row w-100">
+                <!-- Navigationslänkar till vänster -->
+                <div class="col-4 d-flex align-items-center">
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-list"></i>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown" style="background-color: #f8f9fa;">
+                            <li><NavLink class="dropdown-item" href="/home">Home</NavLink></li>
+                            <li><NavLink class="dropdown-item" href="/products">Products</NavLink></li>
+                            <li><NavLink class="dropdown-item" href="/profile">Profile</NavLink></li>
+                            <li><NavLink class="dropdown-item" href="/wishlist">Wishlist</NavLink></li>
+                            <li><NavLink class="dropdown-item" href="/orders">Orders</NavLink></li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Centrerad navigationslänk som ändras baserat på route -->
-            <div class="col-4 d-flex justify-content-center align-items-center">
-                <span class="navbar-text">Manero
-                    @* @if (IsHome)
+                <!-- Centrerad navigationslänk som ändras baserat på route -->
+                <div class="col-4 d-flex justify-content-center align-items-center">
+                    <span class="navbar-text">
+                        Manero
+                        @* @if (IsHome)
                     {
                     <strong>MANERO</strong>
                     }
@@ -40,27 +42,27 @@
                     {
                     <strong>Cart</strong>
                     } *@
-                </span>
-            </div>
+                    </span>
+                </div>
 
-            <!-- Spacer som skjuter allt efter den till höger -->
-            <div class="col-4 d-flex justify-content-end align-items-center">
-                <NavLink class="nav-item nav-link" href="/Cart">
-                    <i class="bi bi-bag" style="color: #495057;"></i>
-                </NavLink>
+                <!-- Spacer som skjuter allt efter den till höger -->
+                <div class="col-4 d-flex justify-content-end align-items-center">
+                    <NavLink class="nav-item nav-link" href="/Cart">
+                        <i class="bi bi-bag" style="color: #495057;"></i>
+                    </NavLink>
+                </div>
             </div>
-        </div>
-    </nav>
-</div>
+        </nav>
+    </div>
 
+}
 
 
 @Body
 
-@if (ShouldShowFooter())
+@if (!ShouldHideFooter())
 {
-    
-
+   
 <footer class="footer fixed-bottom bg-light">
     <div class="container-fluid">
         <div class="row justify-content-center">
@@ -102,11 +104,9 @@
 
 
 @code {
-    bool ShouldShowFooter()
+    bool ShouldHideFooter()
     {
-        return NavigationManager.Uri.Contains("/") || NavigationManager.Uri.Contains("/mom")
-        || NavigationManager.Uri.Contains("/add-address") || NavigationManager.Uri.Contains("/list-address")
-        || NavigationManager.Uri.Contains("/list-cards");
+        return NavigationManager.Uri.Contains("/") || NavigationManager.Uri.Contains("/no-footer") || NavigationManager.Uri.Contains("/special-page");
     }
 }
 
