@@ -1,5 +1,5 @@
 ﻿@page "/cart"
-
+@inject Manero.Services.ProductService ProductService
 @inject HttpClient Http
 
 @using Manero.Components.Models
@@ -63,8 +63,3 @@
     [Inject]
     private NavigationManager? NavigationManager { get; set; }
 }
-
-
-
-
-
