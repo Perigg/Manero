@@ -1,7 +1,8 @@
-﻿@page "/order"
+﻿@page "/order/{orderId:int}"
 @using Manero.Components.Models
 @inject HttpClient Http
 @inject Manero.Services.ProductService ProductService
+@inject Manero.Services.OrderService OrderService
 @inject NavigationManager NavigationManager
 
 <div class="container mt-5">
@@ -36,12 +37,13 @@
 
 
 @code {
+    [Parameter]
+    public int orderId { get; set; }
     private List<OrderItem> orderItems = new List<OrderItem>();
 
     protected override async Task OnInitializedAsync()
     {
-        var orderId = 1; // Replace with actual orderId
-        orderItems = await ProductService.GetOrderItemsAsync(orderId);
+        orderItems = await OrderService.GetOrderItemsAsync(orderId);
     }
 
     private async Task UpdateQuantity(OrderItem item, int newQuantity)
@@ -53,17 +55,15 @@
         else
         {
             item.Quantity = newQuantity;
-            await ProductService.UpdateOrderItemAsync(item);
-            var orderId = 1; // Replace with actual orderId
-            orderItems = await ProductService.GetOrderItemsAsync(orderId);
+            await OrderService.UpdateOrderItemAsync(item);
+            orderItems = await OrderService.GetOrderItemsAsync(orderId);
         }
     }
 
     private async Task RemoveItem(int orderItemId)
     {
-        await ProductService.RemoveOrderItemAsync(orderItemId);
-        var orderId = 1; // Replace with actual orderId
-        orderItems = await ProductService.GetOrderItemsAsync(orderId);
+        await OrderService.RemoveOrderItemAsync(orderItemId);
+        orderItems = await OrderService.GetOrderItemsAsync(orderId);
     }
 
     private void NavigateToCheckout()

@@ -1,4 +1,8 @@
 ﻿using Manero.Components.Models;
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace Manero.Services
 {
@@ -11,24 +15,11 @@ namespace Manero.Services
             _httpClient = httpClient;
         }
 
-        
-        // Methods for Order
-        public async Task<List<OrderItem>> GetOrderItemsAsync(int orderId)
+        // Method to fetch cart items
+        public async Task<List<CartItem>> GetCartItemsAsync()
         {
-            var apiUrl = $"orders/{orderId}/items";
-            return await _httpClient.GetFromJsonAsync<List<OrderItem>>(apiUrl) ?? new List<OrderItem>();
-        }
-
-        public async Task UpdateOrderItemAsync(OrderItem item)
-        {
-            var apiUrl = $"orders/items/{item.OrderItemId}";
-            await _httpClient.PutAsJsonAsync(apiUrl, item);
-        }
-
-        public async Task RemoveOrderItemAsync(int orderItemId)
-        {
-            var apiUrl = $"orders/items/{orderItemId}";
-            await _httpClient.DeleteAsync(apiUrl);
+            var apiUrl = "api/GetCartItems?code=zgpZKFJ5E4w3k2G9xYQLZUPC6HrvvbSjReuYJrudkTkwAzFu5t6u8g==";
+            return await _httpClient.GetFromJsonAsync<List<CartItem>>(apiUrl) ?? new List<CartItem>();
         }
     }
 }
