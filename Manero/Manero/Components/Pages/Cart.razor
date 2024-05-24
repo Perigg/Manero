@@ -1,6 +1,9 @@
 ﻿@page "/cart"
 @inject Manero.Services.ProductService ProductService
 @inject HttpClient Http
+@inject Manero.Services.OrderService OrderService
+@inject NavigationManager NavigationManager
+@inject ILogger<Cart> Logger
 
 @using Manero.Components.Models
 
@@ -37,7 +40,7 @@
                 </div>
             }
             <div class="col-6 text-center mt-3">
-                <button class="btn btn-half" @onclick="NavigateToOrder">View Order</button>
+                <button class="btn btn-half" @onclick="CreateOrderAndNavigate">View Order</button>
             </div>
         </div>
     }
@@ -53,13 +56,25 @@
 
     private void NavigateToProducts()
     {
-        NavigationManager?.NavigateTo("/products");
+        NavigationManager.NavigateTo("/products");
     }
 
-    private void NavigateToOrder()
+    private async Task CreateOrderAndNavigate()
     {
-        NavigationManager?.NavigateTo("/order");
+        Console.WriteLine("CreateOrderAndNavigate method called."); // Debugutskrift
+        Logger.LogInformation("CreateOrderAndNavigate method called."); // Debugutskrift
+
+        try
+        {
+            int orderId = await OrderService.TransferCartToOrderAsync();
+            Console.WriteLine($"Order created with ID: {orderId}"); // Debugutskrift
+            Logger.LogInformation($"Order created with ID: {orderId}"); // Debugutskrift
+            NavigationManager.NavigateTo($"/order/{orderId}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error creating order: {ex.Message}");
+            Logger.LogError($"Error creating order: {ex.Message}");
+        }
     }
-    [Inject]
-    private NavigationManager? NavigationManager { get; set; }
 }

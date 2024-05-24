@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Manero.Client\Manero.Client.csproj" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.2" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.0" />
   </ItemGroup>
 
   <ItemGroup>
