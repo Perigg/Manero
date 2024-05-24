@@ -1,4 +1,9 @@
 ﻿using Manero.Components.Models;
+using System.Net.Http;
+using System.Net.Http.Json;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+
 
 namespace Manero.Services
 {
@@ -11,7 +16,7 @@ namespace Manero.Services
             _httpClient = httpClient;
         }
 
-        // Methods for Cart
+
         public async Task<List<CartItem>> GetCartItemsAsync()
         {
             var apiUrl = "api/GetCartItems?code=zgpZKFJ5E4w3k2G9xYQLZUPC6HrvvbSjReuYJrudkTkwAzFu5t6u8g==";
