@@ -84,10 +84,10 @@ namespace Manero.Services
             return await _orderHttpClient.GetFromJsonAsync<List<OrderItem>>(apiUrl) ?? new List<OrderItem>();
         }
 
-        public async Task UpdateOrderItemAsync(OrderItem item)
+        public async Task UpdateOrderItemAsync(int orderItemId, OrderItem item)
         {
-            var apiUrl = $"https://order-provider.azurewebsites.net/api/orders/items/{item.OrderItemId}?code={OrderApiKey}";
-            await _orderHttpClient.PutAsJsonAsync(apiUrl, item);
+            var response = await _orderHttpClient.PutAsJsonAsync($"https://order-provider.azurewebsites.net/api/orders/items/{orderItemId}?code={OrderApiKey}", item);
+            response.EnsureSuccessStatusCode();
         }
 
         public async Task RemoveOrderItemAsync(int orderItemId)

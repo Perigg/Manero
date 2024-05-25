@@ -6,7 +6,7 @@ namespace Manero.Services
     {
         Task<int> CreateOrderAsync(List<CartItem> cartItems);
         Task<List<OrderItem>> GetOrderItemsAsync(int orderId);
-        Task UpdateOrderItemAsync(OrderItem item);
+        Task UpdateOrderItemAsync(int orderItemId, OrderItem item);
         Task RemoveOrderItemAsync(int orderItemId);
         Task<List<CartItem>> GetCartItemsAsync();
         Task ClearCartAsync();

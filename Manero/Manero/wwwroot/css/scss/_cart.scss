@@ -26,3 +26,25 @@
     width: 50%;
     margin: auto;
 }
+
+.cart-item img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+@media (min-width: 992px) {
+    .cart-item img {
+        max-width: 150px;
+        max-height: 150px;
+    }
+}
+
+.quantity-container {
+    display: flex;
+    align-items: center;
+}
+
+.quantity-text {
+    margin-right: 10px;
+}

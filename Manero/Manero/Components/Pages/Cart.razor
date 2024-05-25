@@ -32,8 +32,9 @@
                             <p class="small">Price: @item.Price.ToString("C")</p>
                             <p class="small">Size: @item.Size</p>
                             <p class="small">Color: @item.Color</p>
-                            <div class="d-flex align-items-center">
-                                <span class="quantity-number me-2">Quantity: @item.Quantity</span>
+                            <div class="quantity-container">
+                                <span class="quantity-text">Quantity:</span>
+                                <span class="quantity-number">@item.Quantity</span>
                             </div>
                         </div>
                     </div>
