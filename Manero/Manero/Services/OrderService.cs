@@ -77,6 +77,22 @@ namespace Manero.Services
             return orderId;
         }
 
+
+        //public async Task<int> CreateOrderAsync(List<CartItem> cartItems)
+        //{
+        //    _logger.LogInformation("Creating order...");
+
+        //    var response = await _orderHttpClient.PostAsJsonAsync($"https://order-provider.azurewebsites.net/api/orders?code={OrderApiKey}", cartItems);
+        //    _logger.LogInformation($"Order creation response status code: {response.StatusCode}");
+
+        //    response.EnsureSuccessStatusCode();
+        //    var result = await response.Content.ReadFromJsonAsync<Dictionary<string, int>>();
+
+        //    _logger.LogInformation($"Order created with ID: {result["orderId"]}");
+        //    return result["orderId"];
+        //}
+
+
         public async Task<List<OrderItem>> GetOrderItemsAsync(int orderId)
         {
             var apiUrl = $"https://order-provider.azurewebsites.net/api/orders/{orderId}/items?code={OrderApiKey}";
