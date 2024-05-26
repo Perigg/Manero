@@ -1,0 +1,59 @@
+﻿@page "/checkout"
+@using Manero.Components.Models
+@inject NavigationManager NavigationManager
+
+<div class="container mt-5">
+    <h4 class="h4">My order <span class="float-end">$41.69</span></h4>
+    <div class="order-summary mt-3 p-3 border">
+        <div class="order-item mb-2">
+            <div class="d-flex justify-content-between">
+                <span>Shoulder bag, black</span>
+                <span>1 x $30.00</span>
+            </div>
+        </div>
+        <div class="order-item mb-2">
+            <div class="d-flex justify-content-between">
+                <span>Summer dress, M, pink</span>
+                <span>1 x $15.98</span>
+            </div>
+        </div>
+        <div class="order-item mb-2">
+            <div class="d-flex justify-content-between text-danger">
+                <span>Discount</span>
+                <span>-4.29</span>
+            </div>
+        </div>
+        <div class="order-item mb-2">
+            <div class="d-flex justify-content-between text-success">
+                <span>Delivery</span>
+                <span>Free</span>
+            </div>
+        </div>
+    </div>
+    <div class="details mt-3">
+        <div class="detail-item mb-2 p-3 border" @onclick="NavigateToShipping">
+            <span>Shipping details</span>
+            <span class="float-end">8000 S Kirkland Ave, Chicago, IL 6065...</span>
+        </div>
+        <div class="detail-item mb-2 p-3 border" @onclick="NavigateToPayment">
+            <span>Payment method</span>
+            <span class="float-end">7741 ******** 6644</span>
+        </div>
+    </div>
+    <div class="comment mt-3 p-3 border">
+        <label for="comment" class="form-label">COMMENT</label>
+        <textarea id="comment" class="form-control" placeholder="Enter your comment"></textarea>
+    </div>
+</div>
+
+@code {
+    private void NavigateToShipping()
+    {
+        NavigationManager.NavigateTo("/shipping-details");
+    }
+
+    private void NavigateToPayment()
+    {
+        NavigationManager.NavigateTo("/payment-method");
+    }
+}
