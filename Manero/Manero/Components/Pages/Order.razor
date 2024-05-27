@@ -36,7 +36,7 @@
             </div>
             <div class="d-flex justify-content-between">
                 <span>Discount</span>
-                <span>@(4.29m.ToString("C"))</span> <!-- Example discount as decimal -->
+                <span>@(0m.ToString("C"))</span> <!-- Example discount as decimal -->
             </div>
             <div class="d-flex justify-content-between">
                 <span>Delivery</span>
@@ -44,7 +44,7 @@
             </div>
             <div class="d-flex justify-content-between font-weight-bold">
                 <span>Total</span>
-                <span>@(orderItems.Sum(item => item.Price * item.Quantity - 4.29m).ToString("C"))</span> <!-- Convert discount to decimal -->
+                <span>@(orderItems.Sum(item => item.Price * item.Quantity - 0m).ToString("C"))</span> <!-- Convert discount to decimal -->
             </div>
         </div>
         <div class="col-12 text-center mt-3">
