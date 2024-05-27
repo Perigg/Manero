@@ -77,71 +77,103 @@ namespace Manero.Services
             return orderId;
         }
 
-
-        //public async Task<int> CreateOrderAsync(List<CartItem> cartItems)
-        //{
-        //    _logger.LogInformation("Creating order...");
-
-        //    var response = await _orderHttpClient.PostAsJsonAsync($"https://order-provider.azurewebsites.net/api/orders?code={OrderApiKey}", cartItems);
-        //    _logger.LogInformation($"Order creation response status code: {response.StatusCode}");
-
-        //    response.EnsureSuccessStatusCode();
-        //    var result = await response.Content.ReadFromJsonAsync<Dictionary<string, int>>();
-
-        //    _logger.LogInformation($"Order created with ID: {result["orderId"]}");
-        //    return result["orderId"];
-        //}
-
-
         public async Task<List<OrderItem>> GetOrderItemsAsync(int orderId)
         {
-            var apiUrl = $"https://order-provider.azurewebsites.net/api/orders/{orderId}/items?code={OrderApiKey}";
-            _logger.LogInformation($"Fetching order items from URL: {apiUrl}");
-            return await _orderHttpClient.GetFromJsonAsync<List<OrderItem>>(apiUrl) ?? new List<OrderItem>();
+            try
+            {
+                var apiUrl = $"https://order-provider.azurewebsites.net/api/orders/{orderId}/items?code={OrderApiKey}";
+                _logger.LogInformation($"Fetching order items from URL: {apiUrl}");
+                return await _orderHttpClient.GetFromJsonAsync<List<OrderItem>>(apiUrl) ?? new List<OrderItem>();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error fetching order items for order ID {orderId}");
+                throw;
+            }
         }
 
         public async Task UpdateOrderItemAsync(int orderItemId, OrderItem item)
         {
-            var response = await _orderHttpClient.PutAsJsonAsync($"https://order-provider.azurewebsites.net/api/orders/items/{orderItemId}?code={OrderApiKey}", item);
-            response.EnsureSuccessStatusCode();
+            try
+            {
+                var response = await _orderHttpClient.PutAsJsonAsync($"https://order-provider.azurewebsites.net/api/orders/items/{orderItemId}?code={OrderApiKey}", item);
+                response.EnsureSuccessStatusCode();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error updating order item with ID {orderItemId}");
+                throw;
+            }
         }
 
         public async Task RemoveOrderItemAsync(int orderItemId)
         {
-            var apiUrl = $"https://order-provider.azurewebsites.net/api/orders/items/{orderItemId}?code={OrderApiKey}";
-            await _orderHttpClient.DeleteAsync(apiUrl);
+            try
+            {
+                var apiUrl = $"https://order-provider.azurewebsites.net/api/orders/items/{orderItemId}?code={OrderApiKey}";
+                await _orderHttpClient.DeleteAsync(apiUrl);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error removing order item with ID {orderItemId}");
+                throw;
+            }
         }
 
         public async Task<List<CartItem>> GetCartItemsAsync()
         {
-            var apiUrl = $"https://cart-product-provider.azurewebsites.net/api/GetCartItems?code={CartApiKey}";
-            _logger.LogInformation($"Fetching cart items from URL: {apiUrl}");
-            var response = await _cartHttpClient.GetAsync(apiUrl);
-            _logger.LogInformation($"Response status code: {response.StatusCode}");
+            try
+            {
+                var apiUrl = $"https://cart-product-provider.azurewebsites.net/api/GetCartItems?code={CartApiKey}";
+                _logger.LogInformation($"Fetching cart items from URL: {apiUrl}");
+                var response = await _cartHttpClient.GetAsync(apiUrl);
+                _logger.LogInformation($"Response status code: {response.StatusCode}");
 
-            response.EnsureSuccessStatusCode();
-            return await response.Content.ReadFromJsonAsync<List<CartItem>>() ?? new List<CartItem>();
+                response.EnsureSuccessStatusCode();
+                return await response.Content.ReadFromJsonAsync<List<CartItem>>() ?? new List<CartItem>();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching cart items");
+                throw;
+            }
         }
 
         public async Task ClearCartAsync()
         {
-            var apiUrl = $"https://cart-product-provider.azurewebsites.net/api/cart/clear?code={CartApiKey}";
-            await _cartHttpClient.PostAsync(apiUrl, null);
+            try
+            {
+                var apiUrl = $"https://cart-product-provider.azurewebsites.net/api/cart/clear?code={CartApiKey}";
+                await _cartHttpClient.PostAsync(apiUrl, null);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error clearing cart");
+                throw;
+            }
         }
 
         public async Task<int> TransferCartToOrderAsync()
         {
-            var cartItems = await GetCartItemsAsync();
-
-            if (cartItems == null || cartItems.Count == 0)
+            try
             {
-                throw new InvalidOperationException("Cart is empty.");
+                var cartItems = await GetCartItemsAsync();
+
+                if (cartItems == null || cartItems.Count == 0)
+                {
+                    throw new InvalidOperationException("Cart is empty.");
+                }
+
+                var orderId = await CreateOrderAsync(cartItems);
+                // await ClearCartAsync();
+
+                return orderId;
             }
-
-            var orderId = await CreateOrderAsync(cartItems);
-            // await ClearCartAsync();
-
-            return orderId;
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error transferring cart to order");
+                throw;
+            }
         }
     }
 }

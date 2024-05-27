@@ -1,5 +1,4 @@
 ﻿using Manero.Services;
-using Microsoft.Extensions.Configuration;
 
 namespace Manero.Registrations
 {

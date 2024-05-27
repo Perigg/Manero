@@ -60,42 +60,69 @@
 
     protected override async Task OnInitializedAsync()
     {
-        orderItems = await OrderService.GetOrderItemsAsync(orderId);
+        try
+        {
+            orderItems = await OrderService.GetOrderItemsAsync(orderId);
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Error fetching order items: {ex.Message}");
+        }
     }
 
     private async Task UpdateQuantity(OrderItem item, int newQuantity)
     {
-        if (newQuantity < 1)
+        try
         {
-            await RemoveItem(item.OrderItemId);
+            if (newQuantity < 1)
+            {
+                await RemoveItem(item.OrderItemId);
+            }
+            else
+            {
+                var updatedItem = new OrderItem
+                    {
+                        OrderItemId = item.OrderItemId,
+                        OrderId = item.OrderId,
+                        ProductId = item.ProductId,
+                        Name = item.Name,
+                        Price = item.Price,
+                        Color = item.Color,
+                        Size = item.Size,
+                        Quantity = newQuantity
+                    };
+                await OrderService.UpdateOrderItemAsync(item.OrderItemId, updatedItem);
+                orderItems = await OrderService.GetOrderItemsAsync(orderId);
+            }
         }
-        else
+        catch (Exception ex)
         {
-            // Create a new OrderItem object with updated quantity
-            var updatedItem = new OrderItem
-                {
-                    OrderItemId = item.OrderItemId,
-                    OrderId = item.OrderId,
-                    ProductId = item.ProductId,
-                    Name = item.Name,
-                    Price = item.Price,
-                    Color = item.Color,
-                    Size = item.Size,
-                    Quantity = newQuantity
-                };
-            await OrderService.UpdateOrderItemAsync(item.OrderItemId, updatedItem);
-            orderItems = await OrderService.GetOrderItemsAsync(orderId);
+            Console.Error.WriteLine($"Error updating order item quantity: {ex.Message}");
         }
     }
 
     private async Task RemoveItem(int orderItemId)
     {
-        await OrderService.RemoveOrderItemAsync(orderItemId);
-        orderItems = await OrderService.GetOrderItemsAsync(orderId);
+        try
+        {
+            await OrderService.RemoveOrderItemAsync(orderItemId);
+            orderItems = await OrderService.GetOrderItemsAsync(orderId);
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Error removing order item: {ex.Message}");
+        }
     }
 
     private void NavigateToCheckout()
     {
-        NavigationManager.NavigateTo($"/checkout/{orderId}");
+        try
+        {
+            NavigationManager.NavigateTo($"/checkout/{orderId}");
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Error navigating to checkout: {ex.Message}");
+        }
     }
 }
