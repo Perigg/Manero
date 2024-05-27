@@ -71,10 +71,21 @@
     private string shippingAddress = "8000 S Kirkland Ave, Chicago, IL 60652";
     private string paymentMethod = "7741 ******** 6644";
     private string comment = "";
+    private string? errorMessage;
 
     protected override async Task OnInitializedAsync()
     {
-        orderDetails = await Http.GetFromJsonAsync<OrderDetails>($"https://checkout-provider.azurewebsites.net/api/checkout/{orderId}");
+        try
+        {
+            var result = await Http.GetFromJsonAsync<OrderDetails>($"https://checkout-provider.azurewebsites.net/api/checkout/{orderId}");
+            orderDetails = result ?? new OrderDetails();
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Error fetching order details: {ex.Message}");
+
+            errorMessage = "Failed to load order details. Please try again later.";
+        }
     }
 
     private void EditShippingDetails()
