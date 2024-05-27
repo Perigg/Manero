@@ -40,7 +40,11 @@
                         <p>@address.AddressOne</p>
                     </div>
                     <div>
-                        <button class="button-options"><img class="button-image" src="https://cdn-icons-png.freepik.com/512/4083/4083831.png" /></button>
+                        @if(DeletionShow){
+                            <button class="button-options" @onclick="() => RemoveAddress((int)address.AddressId)"><img class="button-image" src="https://cdn-icons-png.freepik.com/512/4083/4083831.png" /></button>
+                        } else {
+                            <button class="button-options" disabled><img class="button-image" src="https://cdn-icons-png.freepik.com/512/4083/4083831.png" /></button>
+                        }
                         <button @onclick="() => ToggleOptions((int)address.AddressId!)" class="button-options"><img class="button-image" src="https://cdn-icons-png.freepik.com/512/1632/1632708.png" /></button>
                     </div>
                 }
@@ -54,6 +58,8 @@
 @code {
     List<FormModel> AddressesRetrieved = new List<FormModel>();
     List<InteractiveAddress> InteractiveAddresses = new List<InteractiveAddress>();
+
+    bool DeletionShow = true;
 
     int activeAddress = 1;
 
@@ -93,7 +99,7 @@
     private async Task MapAddressModelToInteractive(List<FormModel> adressmodels) {
         adressmodels.ForEach(ad => InteractiveAddresses.Add(new InteractiveAddress
             {
-                AddressId = (int)ad.AddressId,
+                AddressId = (int)ad.Id,
                 HolderId = ad.HolderId,
                 HolderName = ad.HolderName,
                 AddressOne = ad.AddressOne,
@@ -104,6 +110,25 @@
                 RefreshState = 0,
                 ShowOptions = false
             }));
+    }
+
+    private async Task RemoveAddress(int id){
+        DeletionShow = false;
+        var AddressToRemove = InteractiveAddresses.Find(a => a.AddressId == id);
+        if (AddressToRemove == null){
+            DeletionShow = true;
+            return;
+        }
+        try {
+            var response = await Http.DeleteAsync($"/api/delete-address/{id}?code=EQneDXnmBm9UiauyBeeS-WfTPlcfTW9ULZMoQmnDQgg5AzFu7LJQdg%3D%3D");
+            if (response.IsSuccessStatusCode) {
+                InteractiveAddresses.Remove(AddressToRemove);
+                StateHasChanged();
+            }
+        } catch (Exception ex) {
+            Console.WriteLine($"An error occured: {ex.Message}");
+        }
+        DeletionShow = true;
     }
 
     public class ApiResponse
