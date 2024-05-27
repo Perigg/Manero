@@ -1,0 +1,81 @@
+﻿@page "/cart"
+@inject Manero.Services.ProductService ProductService
+@inject HttpClient Http
+@inject Manero.Services.OrderService OrderService
+@inject NavigationManager NavigationManager
+@inject ILogger<Cart> Logger
+
+@using Manero.Components.Models
+
+<div class="container mt-5">
+    @if (cartItems == null || !cartItems.Any())
+    {
+        <div class="text-center">
+            <img src="images/EmptyCart.svg" alt="Empty cart" class="img-fluid mb-3">
+            <h2>Your cart is empty</h2>
+            <p>Looks like you haven't made any order yet</p>
+            <button class="btn btn-shop-now" @onclick="NavigateToProducts">Shop Now</button>
+        </div>
+    }
+    else
+    {
+        <div class="d-flex flex-column align-items-center">
+            @foreach (var item in cartItems)
+            {
+                <div class="cart-item mb-3 p-3 w-75">
+                    <div class="row">
+                        <div class="col-4 d-flex justify-content-center align-items-center img-container">
+                            <img src="images/ProductPlaceholder.svg" alt="Product image" class="img-fluid img-square">
+                        </div>
+                        <div class="col-8">
+                            <h4 class="h5">@item.Name</h4>
+                            <p class="small">Price: @item.Price.ToString("C")</p>
+                            <p class="small">Size: @item.Size</p>
+                            <p class="small">Color: @item.Color</p>
+                            <div class="quantity-container">
+                                <span class="quantity-text">Quantity:</span>
+                                <span class="quantity-number">@item.Quantity</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+            <div class="col-6 text-center mt-3">
+                <button class="btn btn-half" @onclick="CreateOrderAndNavigate">View Order</button>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private List<CartItem> cartItems = new List<CartItem>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        cartItems = await Http.GetFromJsonAsync<List<CartItem>>("https://cart-product-provider.azurewebsites.net/api/GetCartItems?code=zgpZKFJ5E4w3k2G9xYQLZUPC6HrvvbSjReuYJrudkTkwAzFu5t6u8g==") ?? new List<CartItem>();
+    }
+
+    private void NavigateToProducts()
+    {
+        NavigationManager.NavigateTo("/products");
+    }
+
+    private async Task CreateOrderAndNavigate()
+    {
+        Console.WriteLine("CreateOrderAndNavigate method called."); // Debugutskrift
+        Logger.LogInformation("CreateOrderAndNavigate method called."); // Debugutskrift
+
+        try
+        {
+            int orderId = await OrderService.TransferCartToOrderAsync();
+            Console.WriteLine($"Order created with ID: {orderId}"); // Debugutskrift
+            Logger.LogInformation($"Order created with ID: {orderId}"); // Debugutskrift
+            NavigationManager.NavigateTo($"/order/{orderId}");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error creating order: {ex.Message}");
+            Logger.LogError($"Error creating order: {ex.Message}");
+        }
+    }
+}
