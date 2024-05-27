@@ -1014,6 +1014,38 @@ h6 {
   border-radius: 30px;
 }
 
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.order-summary {
+  background-color: #f8f9fa;
+  border-radius: 10px;
+}
+
+.order-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.comment {
+  border-radius: 10px;
+}
+
+textarea {
+  border-radius: 10px;
+  resize: none;
+}
+
 h1:focus {
   outline: none;
 }

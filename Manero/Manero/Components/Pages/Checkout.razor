@@ -1,52 +1,97 @@
-﻿@page "/checkout"
-@using Manero.Components.Models
+﻿@page "/checkout/{orderId:int}"
+@inject HttpClient Http
 @inject NavigationManager NavigationManager
 
 <div class="container mt-5">
-    <h4 class="h4">My order <span class="float-end">$41.69</span></h4>
-    <div class="order-summary mt-3 p-3 border">
-        <div class="order-item mb-2">
-            <div class="d-flex justify-content-between">
-                <span>Shoulder bag, black</span>
-                <span>1 x $30.00</span>
+    <h2>My order</h2>
+    <div class="order-summary">
+        @foreach (var item in orderDetails.Items)
+        {
+            <div class="order-item mb-3 p-3 border w-75">
+                <div class="row">
+                    <div class="col-6 d-flex align-items-center">
+                        <img src="images/ProductPlaceholder.svg" alt="Product image" class="img-fluid img-square me-3">
+                        <div>
+                            <h4 class="h5">@item.Name</h4>
+                            <p class="small">@item.Quantity x @item.Price.ToString("C")</p>
+                            <p class="small">Size: @item.Size</p>
+                            <p class="small">Color: @item.Color</p>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="order-item mb-2">
-            <div class="d-flex justify-content-between">
-                <span>Summer dress, M, pink</span>
-                <span>1 x $15.98</span>
-            </div>
-        </div>
-        <div class="order-item mb-2">
-            <div class="d-flex justify-content-between text-danger">
+        }
+        <div class="order-totals mt-3 p-3 border">
+            <p class="d-flex justify-content-between">
+                <span>Subtotal</span>
+                <span>@orderDetails.Subtotal.ToString("C")</span>
+            </p>
+            <p class="d-flex justify-content-between">
                 <span>Discount</span>
-                <span>-4.29</span>
-            </div>
-        </div>
-        <div class="order-item mb-2">
-            <div class="d-flex justify-content-between text-success">
+                <span>@orderDetails.Discount.ToString("C")</span>
+            </p>
+            <p class="d-flex justify-content-between">
                 <span>Delivery</span>
-                <span>Free</span>
-            </div>
+                <span>@orderDetails.DeliveryFee == 0 ? "Free" : @orderDetails.DeliveryFee.ToString("C")</span>
+            </p>
+            <h4 class="d-flex justify-content-between">
+                <span>Total</span>
+                <span>@orderDetails.Total.ToString("C")</span>
+            </h4>
         </div>
     </div>
-    <div class="details mt-3">
-        <div class="detail-item mb-2 p-3 border" @onclick="NavigateToShipping">
-            <span>Shipping details</span>
-            <span class="float-end">8000 S Kirkland Ave, Chicago, IL 6065...</span>
-        </div>
-        <div class="detail-item mb-2 p-3 border" @onclick="NavigateToPayment">
-            <span>Payment method</span>
-            <span class="float-end">7741 ******** 6644</span>
-        </div>
+
+    <div class="shipping-details mt-4 p-3 border">
+        <h5>Shipping details</h5>
+        <p>@shippingAddress</p>
+        <button class="btn btn-link" @onclick="EditShippingDetails">Edit</button>
     </div>
-    <div class="comment mt-3 p-3 border">
-        <label for="comment" class="form-label">COMMENT</label>
-        <textarea id="comment" class="form-control" placeholder="Enter your comment"></textarea>
+
+    <div class="payment-method mt-4 p-3 border">
+        <h5>Payment method</h5>
+        <p>@paymentMethod</p>
+        <button class="btn btn-link" @onclick="EditPaymentMethod">Edit</button>
+    </div>
+
+    <div class="comment mt-4 p-3 border">
+        <h5>Comment</h5>
+        <textarea class="form-control" placeholder="Enter your comment" @bind="comment"></textarea>
+    </div>
+
+    <div class="text-center mt-4">
+        <button class="btn btn-primary btn-lg" @onclick="ProceedToCheckout">Proceed to Checkout</button>
     </div>
 </div>
 
 @code {
+
+    [Parameter]
+    public int orderId { get; set; }
+    private OrderDetails orderDetails = new OrderDetails();
+    private string shippingAddress = "8000 S Kirkland Ave, Chicago, IL 60652";
+    private string paymentMethod = "7741 ******** 6644";
+    private string comment = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        orderDetails = await Http.GetFromJsonAsync<OrderDetails>($"https://checkout-provider.azurewebsites.net/api/checkout/{orderId}");
+    }
+
+    private void EditShippingDetails()
+    {
+        // Implement edit shipping details functionality
+    }
+
+    private void EditPaymentMethod()
+    {
+        // Implement edit payment method functionality
+    }
+
+    private void ProceedToCheckout()
+    {
+        // Implement proceed to checkout functionality
+    }
+
     private void NavigateToShipping()
     {
         NavigationManager.NavigateTo("/shipping-details");
