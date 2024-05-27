@@ -1026,6 +1026,7 @@ h6 {
 
 .order-item {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
 }
@@ -1044,6 +1045,21 @@ h6 {
 textarea {
   border-radius: 10px;
   resize: none;
+}
+
+.item-details {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.item-name {
+  flex: 1;
+}
+
+.item-price {
+  flex: 0 0 auto;
+  text-align: right;
 }
 
 h1:focus {
