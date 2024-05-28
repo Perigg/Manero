@@ -9,22 +9,12 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
 
-builder.Services.AddScoped(sp => new HttpClient
-{
-    BaseAddress = new Uri("https://cardprovider.azurewebsites.net/")
-});
-
-builder.Services.AddScoped(sp => new HttpClient
-{
-	BaseAddress = new Uri("https://addressprovider.azurewebsites.net/")
-});
 builder.Services.AddBlazorBootstrap();
 builder.Services.AddScoped<ApiService>();
 builder.Services.AddServiceRegistrations(builder.Configuration);
 builder.Services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
 
 builder.Logging.AddConsole();
-
 
 var app = builder.Build();
 

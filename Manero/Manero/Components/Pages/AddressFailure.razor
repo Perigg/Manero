@@ -4,7 +4,6 @@
 @inject HttpClient Http
 @inject NavigationManager NavigationManager;
 
-
 @code {
 	void NavigateHome() {
 		NavigationManager.NavigateTo("/list-address");
@@ -23,8 +22,5 @@
 			<p>Your address could not be added, please try again later.</p>
 		</div>
 		<button class="btn" id="back-to-card-list-button" @onclick="NavigateHome">Go Back</button>
-
 	</div>
-
-
 </div>

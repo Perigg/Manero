@@ -4,7 +4,6 @@
 @inject HttpClient Http
 @inject NavigationManager NavigationManager;
 
-
 @code {
 	void NavigateHome() {
 		NavigationManager.NavigateTo("/list-cards");
@@ -23,8 +22,5 @@
 			<p>Your card was successfully added! Let's go shopping!</p>
 		</div>
 		<button class="btn" id="back-to-card-list-button" @onclick="NavigateHome">Go Back</button>
-
 	</div>
-
-
 </div>

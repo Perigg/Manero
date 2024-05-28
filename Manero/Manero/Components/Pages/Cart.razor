@@ -6,6 +6,7 @@
 @inject ILogger<Cart> Logger
 
 @using Manero.Components.Models
+@rendermode InteractiveServer
 
 <div class="container mt-5">
     @if (cartItems == null || !cartItems.Any())
