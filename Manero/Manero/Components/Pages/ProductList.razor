@@ -107,6 +107,7 @@ else
     {
         try
         {
+
             products = await ApiService.GetProducts();
             var colorStrings = await ApiService.GetUniqueColors();
             colors = colorStrings.SelectMany(c => c.Split(',')).Distinct().ToList();

@@ -1029,12 +1029,6 @@ h6 {
   border-radius: 30px;
 }
 
-.body {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 .main-container {
   max-width: 80vw;
   padding: 2rem;
@@ -1194,12 +1188,6 @@ h6 {
     grid-template-columns: repeat(4, 1fr);
   }
 }
-.body {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 .products-container {
   padding: 2rem;
   margin: 2rem auto;
