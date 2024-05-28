@@ -46,7 +46,7 @@
         StateHasChanged();
     }
 
-    private async Task MapCardModelToInteractive(List<CardFormModel> cardmodels) {
+    private void MapCardModelToInteractive(List<CardFormModel> cardmodels) {
         cardmodels.ForEach(cm => cards.Add(new CardInteractive
             {
                 CardId = (int)cm.CardId,
@@ -70,9 +70,8 @@
                 var result = await response.Content.ReadFromJsonAsync<ApiResponse>();
                 await JSRuntime.InvokeVoidAsync("console.log", result);
                 cardsRetrieved = result?.Value.ToList();
-                await JSRuntime.InvokeVoidAsync("console.log", cardsRetrieved[0]);
                 if (cardsRetrieved != null) {
-                    await MapCardModelToInteractive(cardsRetrieved);
+                    MapCardModelToInteractive(cardsRetrieved);
                     await JSRuntime.InvokeVoidAsync("console.log", cards);
                     StateHasChanged();
                 } else {

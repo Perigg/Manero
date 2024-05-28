@@ -6,7 +6,12 @@ namespace Manero.Registrations
     {
         public static void AddServiceRegistrations(this IServiceCollection services, IConfiguration config)
         {
-            services.AddHttpClient<ProductService>(client =>
+			services.AddScoped(sp => new HttpClient
+			{
+				BaseAddress = new Uri("https://addressprovider.azurewebsites.net/")
+			});
+
+			services.AddHttpClient<ProductService>(client =>
             {
                 client.BaseAddress = new Uri("https://cart-product-provider.azurewebsites.net/");
             });

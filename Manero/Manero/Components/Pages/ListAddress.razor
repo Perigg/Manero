@@ -80,13 +80,12 @@
             if (response.IsSuccessStatusCode) {
                 var AddressesRetrieved = await response.Content.ReadFromJsonAsync<List<FormModel>>();
                 if (AddressesRetrieved != null && AddressesRetrieved.Count != 0) {
-                    await MapAddressModelToInteractive(AddressesRetrieved);
+                    MapAddressModelToInteractive(AddressesRetrieved);
                     StateHasChanged();
                 } else {
                     Console.WriteLine("No addresses available");
                 }
             } else {
-                // Handle errors or issues here
                 Console.WriteLine("Failed to load addresses");
             }
 
@@ -96,7 +95,7 @@
         }
     }
 
-    private async Task MapAddressModelToInteractive(List<FormModel> adressmodels) {
+    private void MapAddressModelToInteractive(List<FormModel> adressmodels) {
         adressmodels.ForEach(ad => InteractiveAddresses.Add(new InteractiveAddress
             {
                 AddressId = (int)ad.Id,
