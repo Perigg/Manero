@@ -1,0 +1,35 @@
+﻿.order-summary {
+    background-color: #f8f9fa;
+    border-radius: 10px;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.comment {
+    border-radius: 10px;
+}
+
+textarea {
+    border-radius: 10px;
+    resize: none;
+}
+
+.item-details {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.item-name {
+    flex: 1;
+}
+
+.item-price {
+    flex: 0 0 auto;
+    text-align: right;
+}

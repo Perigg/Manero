@@ -1,0 +1,112 @@
+﻿@page "/checkout/{orderId:int}"
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+
+<div class="container mt-5">
+    <h2>My order</h2>
+    <div class="order-summary">
+        @foreach (var item in orderDetails.Items)
+        {
+            <div class="order-item mb-3 p-3">
+                <div class="item-details">
+                    <span class="item-name">@item.Name, @item.Size, @item.Color</span>
+                    <span class="item-price">@item.Quantity x @item.Price.ToString("C")</span>
+                </div>
+            </div>
+        }
+        <div class="order-totals mt-3 p-3">
+            <p class="d-flex justify-content-between">
+                <span>Subtotal</span>
+                <span>@orderDetails.Subtotal.ToString("C")</span>
+            </p>
+            <p class="d-flex justify-content-between">
+                <span>Discount</span>
+                <span>@orderDetails.Discount.ToString("C")</span>
+            </p>
+            <p class="d-flex justify-content-between">
+                <span>Delivery</span>
+                <span>@(orderDetails.DeliveryFee == 0 ? "Free" : orderDetails.DeliveryFee.ToString("C"))</span>
+            </p>
+            <h4 class="d-flex justify-content-between">
+                <span>Total</span>
+                <span>@orderDetails.Total.ToString("C")</span>
+            </h4>
+        </div>
+    </div>
+
+    <div class="shipping-details mt-4 p-3 border">
+        <h5>Shipping details</h5>
+        <p>@shippingAddress</p>
+        <div class="d-flex justify-content-center">
+            <button class="btn btn-link w-50" @onclick="EditShippingDetails">Edit</button>
+        </div>
+    </div>
+
+    <div class="payment-method mt-4 p-3 border">
+        <h5>Payment method</h5>
+        <p>@paymentMethod</p>
+        <div class="d-flex justify-content-center">
+            <button class="btn btn-link w-50" @onclick="EditPaymentMethod">Edit</button>
+        </div>
+    </div>
+
+    <div class="comment mt-4 p-3 border">
+        <h5>Comment</h5>
+        <div class="d-flex justify-content-center">
+            <textarea class="form-control w-50" placeholder="Enter your comment" @bind="comment"></textarea>
+        </div>
+    </div>
+
+    <div class="text-center mt-4">
+        <button class="btn btn-primary btn-lg w-50 mx-auto d-block" @onclick="ProceedToConfirmOrder">Confirm Order</button>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int orderId { get; set; }
+    private OrderDetails orderDetails = new OrderDetails();
+    private string shippingAddress = "8000 S Kirkland Ave, Chicago, IL 60652";
+    private string paymentMethod = "7741 ******** 6644";
+    private string comment = "";
+    private string? errorMessage;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var result = await Http.GetFromJsonAsync<OrderDetails>($"https://checkout-provider.azurewebsites.net/api/checkout/{orderId}?code=1pk0rOqYanPB7rFeO9UbJszdXRRhHHRLRBI37ybESKzBAzFuz0-f6Q==");
+            orderDetails = result ?? new OrderDetails();
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Error fetching order details: {ex.Message}");
+            errorMessage = "Failed to load order details. Please try again later.";
+        }
+    }
+
+    private void EditShippingDetails()
+    {
+
+    }
+
+    private void EditPaymentMethod()
+    {
+
+    }
+
+    private void ProceedToConfirmOrder()
+    {
+
+    }
+
+    private void NavigateToShipping()
+    {
+        NavigationManager.NavigateTo("/shipping-details");
+    }
+
+    private void NavigateToPayment()
+    {
+        NavigationManager.NavigateTo("/payment-method");
+    }
+}

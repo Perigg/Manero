@@ -1,0 +1,128 @@
+﻿@page "/order/{orderId:int}"
+@using Manero.Components.Models
+@inject HttpClient Http
+@inject Manero.Services.ProductService ProductService
+@inject Manero.Services.OrderService OrderService
+@inject NavigationManager NavigationManager
+
+<div class="container mt-5">
+    <div class="d-flex flex-column align-items-center">
+        @foreach (var item in orderItems)
+        {
+            <div class="order-item mb-3 p-3 w-100 position-relative">
+                <div class="row">
+                    <div class="col-4 d-flex justify-content-center align-items-center img-container">
+                        <img src="images/ProductPlaceholder.svg" alt="Product image" class="img-fluid img-square">
+                    </div>
+                    <div class="col-8">
+                        <h4 class="h5">@item.Name</h4>
+                        <p class="small">Price: @item.Price.ToString("C")</p>
+                        <p class="small">Size: @item.Size</p>
+                        <p class="small">Color: @item.Color</p>
+                        <div class="quantity-controls position-absolute" style="right: 10px; top: 50%; transform: translateY(-50%);">
+                            <button class="btn btn-outline-secondary btn-circle d-block mb-1" @onclick="() => UpdateQuantity(item, item.Quantity + 1)">+</button>
+                            <span class="quantity-number d-block text-center">@item.Quantity</span>
+                            <button class="btn btn-outline-secondary btn-circle d-block mt-1" @onclick="() => UpdateQuantity(item, item.Quantity - 1)">-</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="summary w-100 p-3 mt-3 border">
+            <h5>Summary</h5>
+            <div class="d-flex justify-content-between">
+                <span>Subtotal</span>
+                <span>@orderItems.Sum(item => item.Price * item.Quantity).ToString("C")</span>
+            </div>
+            <div class="d-flex justify-content-between">
+                <span>Discount</span>
+                <span>@(0m.ToString("C"))</span> <!-- Example discount -->
+            </div>
+            <div class="d-flex justify-content-between">
+                <span>Delivery</span>
+                <span>Free</span>
+            </div>
+            <div class="d-flex justify-content-between font-weight-bold">
+                <span>Total</span>
+                <span>@(orderItems.Sum(item => item.Price * item.Quantity - 0m).ToString("C"))</span>
+            </div>
+        </div>
+        <div class="col-6 text-center mt-3">
+            <button class="btn btn-primary btn-half" @onclick="NavigateToCheckout">Proceed to Checkout</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int orderId { get; set; }
+    private List<OrderItem> orderItems = new List<OrderItem>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            orderItems = await OrderService.GetOrderItemsAsync(orderId);
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Error fetching order items: {ex.Message}");
+        }
+    }
+
+    private async Task UpdateQuantity(OrderItem item, int newQuantity)
+    {
+        try
+        {
+            if (newQuantity < 1)
+            {
+                await RemoveItem(item.OrderItemId);
+            }
+            else
+            {
+                var updatedItem = new OrderItem
+                    {
+                        OrderItemId = item.OrderItemId,
+                        OrderId = item.OrderId,
+                        ProductId = item.ProductId,
+                        Name = item.Name,
+                        Price = item.Price,
+                        Color = item.Color,
+                        Size = item.Size,
+                        Quantity = newQuantity
+                    };
+                await OrderService.UpdateOrderItemAsync(item.OrderItemId, updatedItem);
+                orderItems = await OrderService.GetOrderItemsAsync(orderId);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Error updating order item quantity: {ex.Message}");
+        }
+    }
+
+    private async Task RemoveItem(int orderItemId)
+    {
+        try
+        {
+            await OrderService.RemoveOrderItemAsync(orderItemId);
+            orderItems = await OrderService.GetOrderItemsAsync(orderId);
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Error removing order item: {ex.Message}");
+        }
+    }
+
+    private void NavigateToCheckout()
+    {
+        try
+        {
+            NavigationManager.NavigateTo($"/checkout/{orderId}");
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"Error navigating to checkout: {ex.Message}");
+        }
+    }
+}
