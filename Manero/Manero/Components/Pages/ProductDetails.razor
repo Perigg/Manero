@@ -1,0 +1,113 @@
+﻿@page "/productdetails/{productId:int}"
+@using ProductCatalog.Shared.DTOs
+@using YourBlazorApp.Services
+@inject ApiService ApiService
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
+
+@if (product == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="products-container">
+        <div class="product-details">
+            <img class="product-image" src="@product.ImageUrl" alt="@product.Name" />
+            <div class="product-title"><h2>@product.Name</h2></div>
+            <div class="product-price">
+                <p>Price $@product.Price</p>
+                <div class="product-quantity-control">
+                    <button class="btn btn-secondary-decrease" @onclick="DecreaseQuantity">-</button>
+                    <span class="btn-quantity">@quantity</span>
+                    <button class="btn btn-secondary-increase" @onclick="IncreaseQuantity">+</button>
+                </div>
+            </div>
+            <div class="product-size">
+                <p style="font-weight:600">Size </p>
+                @foreach (var size in product.Sizes)
+                {
+                    <div class="size-icon @(selectedSize == size ? "selected" : "")" @onclick="() => SelectSize(size)">@size</div>
+                }
+            </div>
+            <div class="product-color">
+                <p style="font-weight:600">Color </p>
+                @foreach (var color in product.Colors)
+                {
+                    <div class="color-icon @(selectedColor == color ? "selected" : "")" style="background-color:@color" @onclick="() => SelectColor(color)"></div>
+                }
+            </div>
+            <div class="product-description">
+                <p style="font-weight:600">Description : </p>
+                <p>@product.Description</p>
+            </div>
+            <p>@(product.IsAvailable ? "Available" : "Out of Stock")</p>
+
+            <div class="button-container">
+                <button class="btn btn-add-cart" @onclick="AddToCart" disabled="@(string.IsNullOrEmpty(selectedSize) || string.IsNullOrEmpty(selectedColor))">+ ADD TO CART</button>
+                <button class="btn btn-secondary-return" @onclick="NavigateBack">Back to Product List</button>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public int productId { get; set; }
+
+    private ProductDetailsDTO product;
+    private int quantity = 1;
+    private string selectedSize;
+    private string selectedColor;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            product = await ApiService.GetProduct(productId);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading product details: {ex.Message}");
+        }
+    }
+
+    private void DecreaseQuantity()
+    {
+        if (quantity > 1)
+        {
+            quantity--;
+        }
+    }
+
+    private void IncreaseQuantity()
+    {
+        if (quantity < product.Quantity)
+        {
+            quantity++;
+        }
+    }
+
+    private void SelectSize(string size)
+    {
+        selectedSize = size;
+    }
+
+    private void SelectColor(string color)
+    {
+        selectedColor = color;
+    }
+
+    private void AddToCart()
+    {
+        if (!string.IsNullOrEmpty(selectedSize) && !string.IsNullOrEmpty(selectedColor))
+        {
+            Console.WriteLine($"Added to cart: {product.Name}, Size: {selectedSize}, Color: {selectedColor}, Quantity: {quantity}");
+        }
+    }
+
+    private void NavigateBack()
+    {
+        Navigation.NavigateTo("/productlist");
+    }
+}

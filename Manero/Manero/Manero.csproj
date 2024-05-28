@@ -8,15 +8,28 @@
 
   <ItemGroup>
     <Content Remove="compilerconfig.json" />
+    <Content Remove="wwwroot\Assets\filter.svg" />
+    <Content Remove="wwwroot\Assets\sorting.svg" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\ProductCatalog.Shared\ProductCatalog.Shared.csproj" />
     <ProjectReference Include="..\Manero.Client\Manero.Client.csproj" />
+    <PackageReference Include="Blazor.Bootstrap" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="8.0.2" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="compilerconfig.json" />
+    <None Include="wwwroot\Assets\filter.svg" />
+    <None Include="wwwroot\Assets\sorting.svg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Components\Pages\ProductList.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
   </ItemGroup>
 
 </Project>
