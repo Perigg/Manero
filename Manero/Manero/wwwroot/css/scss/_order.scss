@@ -32,8 +32,8 @@
 .quantity-number {
     display: block;
     text-align: center;
-    line-height: 40px; /* Ensure this matches the height of the buttons */
-    margin-left: 5px; /* Adjust this value to move the text slightly to the right */
+    line-height: 40px;
+    margin-left: 5px;
 }
 
 .quantity-controls {
@@ -42,6 +42,7 @@
 
 .order-item {
     position: relative;
+    background-color: #f8f9fa;
 }
 
 .quantity-number {

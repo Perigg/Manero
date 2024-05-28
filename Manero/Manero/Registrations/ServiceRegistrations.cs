@@ -16,7 +16,6 @@ namespace Manero.Registrations
                 client.BaseAddress = new Uri("https://order-provider.azurewebsites.net/");
             });
 
-            // Adding a named HttpClient for CartProductProvider
             services.AddHttpClient("CartProductClient", client =>
             {
                 client.BaseAddress = new Uri("https://cart-product-provider.azurewebsites.net/");

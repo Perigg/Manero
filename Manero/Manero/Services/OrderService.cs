@@ -28,7 +28,7 @@ namespace Manero.Services
 
         public async Task<int> CreateOrderAsync(List<CartItem> cartItems)
         {
-            int orderId;  // Deklarera orderId här
+            int orderId;
 
             using (var conn = new SqlConnection(_connectionString))
             {
@@ -36,18 +36,16 @@ namespace Manero.Services
                 using var transaction = conn.BeginTransaction();
                 try
                 {
-                    // Insert into Orders table
                     var insertOrderQuery = "INSERT INTO Orders (CustomerID, OrderDate, TotalAmount) OUTPUT INSERTED.OrderID VALUES (@CustomerID, @OrderDate, @TotalAmount)";
                     using (var cmd = new SqlCommand(insertOrderQuery, conn, transaction))
                     {
-                        cmd.Parameters.AddWithValue("@CustomerID", 1); // Replace with actual CustomerID
+                        cmd.Parameters.AddWithValue("@CustomerID", 1);
                         cmd.Parameters.AddWithValue("@OrderDate", DateTime.UtcNow);
                         cmd.Parameters.AddWithValue("@TotalAmount", cartItems.Sum(item => item.Price * item.Quantity));
 
                         orderId = (int)await cmd.ExecuteScalarAsync();
                     }
 
-                    // Insert into OrderItems table
                     var insertOrderItemQuery = "INSERT INTO OrderItems (OrderId, ProductId, Name, Price, Color, Size, Quantity) VALUES (@OrderId, @ProductId, @Name, @Price, @Color, @Size, @Quantity)";
                     foreach (var item in cartItems)
                     {
@@ -63,7 +61,6 @@ namespace Manero.Services
                         await cmd.ExecuteNonQueryAsync();
                     }
 
-                    // Commit transaction
                     transaction.Commit();
                 }
                 catch (Exception ex)
