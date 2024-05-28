@@ -47,7 +47,7 @@
                 <span>@(orderItems.Sum(item => item.Price * item.Quantity - 0m).ToString("C"))</span>
             </div>
         </div>
-        <div class="col-12 text-center mt-3">
+        <div class="col-6 text-center mt-3">
             <button class="btn btn-primary btn-half" @onclick="NavigateToCheckout">Proceed to Checkout</button>
         </div>
     </div>

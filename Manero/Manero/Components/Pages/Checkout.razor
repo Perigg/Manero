@@ -37,22 +37,28 @@
     <div class="shipping-details mt-4 p-3 border">
         <h5>Shipping details</h5>
         <p>@shippingAddress</p>
-        <button class="btn btn-link" @onclick="EditShippingDetails">Edit</button>
+        <div class="d-flex justify-content-center">
+            <button class="btn btn-link w-50" @onclick="EditShippingDetails">Edit</button>
+        </div>
     </div>
 
     <div class="payment-method mt-4 p-3 border">
         <h5>Payment method</h5>
         <p>@paymentMethod</p>
-        <button class="btn btn-link" @onclick="EditPaymentMethod">Edit</button>
+        <div class="d-flex justify-content-center">
+            <button class="btn btn-link w-50" @onclick="EditPaymentMethod">Edit</button>
+        </div>
     </div>
 
     <div class="comment mt-4 p-3 border">
         <h5>Comment</h5>
-        <textarea class="form-control" placeholder="Enter your comment" @bind="comment"></textarea>
+        <div class="d-flex justify-content-center">
+            <textarea class="form-control w-50" placeholder="Enter your comment" @bind="comment"></textarea>
+        </div>
     </div>
 
     <div class="text-center mt-4">
-        <button class="btn btn-primary btn-lg" @onclick="ProceedToConfirmOrder">Confirm Order</button>
+        <button class="btn btn-primary btn-lg w-50 mx-auto d-block" @onclick="ProceedToConfirmOrder">Confirm Order</button>
     </div>
 </div>
 

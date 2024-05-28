@@ -1163,11 +1163,6 @@ h6 {
   border-radius: 30px;
 }
 
-.container {
-  max-width: 600px;
-  margin: 0 auto;
-}
-
 .order-summary {
   background-color: #f8f9fa;
   border-radius: 10px;
