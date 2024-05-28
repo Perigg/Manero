@@ -18,6 +18,8 @@
 
     private DotNetObjectReference<ListCards>? dotNetHelper;
 
+    bool DeletionShow = true;
+
     int activeCard = 1; //set to first got card
 
     bool swiperActive;
@@ -129,6 +131,25 @@
             card.RefreshState++;
         }
     }
+    private async Task RemoveCard(int id){
+        DeletionShow = false;
+        //try remove card
+        var CardToRemove = cards.Find(c => c.CardId == id);
+        if (CardToRemove == null){
+            DeletionShow = true;
+            return;
+        }
+        try {
+            var response = await Http.DeleteAsync($"/api/delete-card/{id}?code=LO9DzogyJ3uqjiFbncAB7l7iGHKLV2mKc3VN4UGtpR__AzFuqGV-VQ%3D%3D");
+            if (response.IsSuccessStatusCode) {
+                cards.Remove(CardToRemove);
+                StateHasChanged();
+            }
+        } catch (Exception ex) {
+            Console.WriteLine($"An error occured: {ex.Message}");
+        }
+        DeletionShow = true;
+    }
 }
 
 
@@ -185,7 +206,11 @@
                     }
                     @if (card.ShowOptions) {
                         <div>
-                            <button class="button-options"><img class="button-image" src="https://cdn-icons-png.freepik.com/512/4083/4083831.png" /></button>
+                            @if(DeletionShow){
+                                <button class="button-options" @onclick="() => RemoveCard((int)card.CardId)"><img class="button-image" src="https://cdn-icons-png.freepik.com/512/4083/4083831.png" /></button>
+                            } else {
+                                <button class="button-options" disabled><img class="button-image" src="https://cdn-icons-png.freepik.com/512/4083/4083831.png" /></button>
+                            }
                             <button @onclick="() => ToggleOptions((int)card.CardId!)" class="button-options"><img class="button-image" src="https://cdn-icons-png.freepik.com/512/1632/1632708.png" /></button>
                         </div>
                     }

@@ -1,0 +1,218 @@
+﻿@page "/productlist"
+@using ProductCatalog.Shared.DTOs;
+@using YourBlazorApp.Services
+@using static System.Net.WebRequestMethods
+@inject ApiService ApiService
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
+
+@if (products == null)
+{
+    <p><em>Loading...</em></p>
+}
+
+else
+{
+    <div class="main-container">
+        <div class="product-filter">
+            <img src="/Assets/filter.svg" alt="filter-icon" @onclick="ToggleFilter" />
+            <img src="/Assets/sorting.svg" alt="sorting-icon" @onclick="ToggleSorting" />
+        </div>
+        @if (showFilter)
+        {
+            <div class="filter-options">
+                <div class="filter-section">
+                    <h5>Size</h5>
+                    <div class="size-options">
+                        @foreach (var size in sizes)
+                        {
+                            <button class="size-icon @(selectedSize == size ? "selected" : "")" @onclick="() => SelectSize(size)">@size</button>
+                        }
+                    </div>
+                </div>
+                <div class="filter-section">
+                    <h5>Color</h5>
+                    <div class="color-options">
+                        @foreach (var color in colors)
+                        {
+                            <div class="color-icon @(selectedColor == color ? "selected" : "")" style="background-color:@color" @onclick="() => SelectColor(color)"></div>
+                        }
+                    </div>
+                </div>
+                <div class="filter-section">
+                    <h5>Price</h5>
+                    <input class="filter-price-range" type="range" min="0" max="1500" step="10" @bind="priceRange" />
+                    <p>Price: $0 - $@priceRange</p>
+                </div>
+                <div class="filter-section">
+                    <h5>Gender</h5>
+                    <div class="gender-options">
+                        <button class="gender-icon @(selectedGender == "Man" ? "selected" : "")" @onclick='() => SelectGender("Man")'>Man</button>
+                        <button class="gender-icon @(selectedGender == "Woman" ? "selected" : "")" @onclick='() => SelectGender("Woman")'>Woman</button>
+                        <button class="gender-icon @(selectedGender == "Unisex" ? "selected" : "")" @onclick='() => SelectGender("Unisex")'>Unisex</button>
+                    </div>
+                </div>
+                <div class="filter-section">
+                    <h5>Tags</h5>
+                    <div class="category-options">
+                        @foreach (var category in allCategories)
+                        {
+                            <button class="category-icon @(selectedCategory == category.CategoryName ? "selected" : "")" @onclick="() => SelectCategory(category.CategoryName)">@category.CategoryName</button>
+                        }
+                    </div>
+                </div>
+                <button class="btn btn-apply-filters" @onclick="ApplyFilters">Apply Filters</button>
+            </div>
+        }
+        @if (showSorting)
+        {
+            <div class="sorting-options">
+                <button class="btn btn-sort" @onclick='() => SortProducts("price_asc")'>Price: Low to High</button>
+                <button class="btn btn-sort" @onclick='() => SortProducts("price_desc")'>Price: High to Low</button>
+            </div>
+        }
+
+        <div class="product-list-container">
+            @foreach (var product in products)
+            {
+                <div class="product-item" @onclick="() => NavigateToDetails(product.ProductId)">
+                    <img class="image-container" src="@product.ImageUrl" alt="@product.Name" />
+                    <div class="product-info">
+                        <h5>@product.Name</h5>
+                        <p>Price: $@product.Price</p>
+                        <p>@(product.IsAvailable ? "Available" : "Out of Stock")</p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    private List<ProductDetailsDTO>? products;
+    private List<ProductDetailsDTO>? filteredProducts;
+    private List<CategoryDTO> categories = new List<CategoryDTO>();
+    private List<CategoryDTO> allCategories = new List<CategoryDTO>();
+    private List<string> sizes = new List<string> { "XS", "S", "M", "L", "XL", "XXL" };
+    private List<string> colors = new List<string>();
+    private bool showFilter = false;
+    private bool showSorting = false;
+    private string? selectedSize;
+    private string? selectedColor;
+    private string? selectedCategory;
+    private string? selectedGender;
+    private int priceRange = 1500;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+
+            products = await ApiService.GetProducts();
+            var colorStrings = await ApiService.GetUniqueColors();
+            colors = colorStrings.SelectMany(c => c.Split(',')).Distinct().ToList();
+            categories = await ApiService.GetCategories();
+            filteredProducts = new List<ProductDetailsDTO>(products);
+            allCategories = FlattenCategories(categories);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading products: {ex.Message}");
+        }
+    }
+
+    private void NavigateToDetails(int productId)
+    {
+        Navigation.NavigateTo($"/productdetails/{productId}");
+    }
+
+    private void ToggleFilter()
+    {
+        showFilter = !showFilter;
+    }
+
+    private void ToggleSorting()
+    {
+        showSorting = !showSorting;
+    }
+
+    private void SortProducts(string criteria)
+    {
+        if (criteria == "price_asc")
+        {
+            products = products.OrderBy(p => p.Price).ToList();
+        }
+        else if (criteria == "price_desc")
+        {
+            products = products.OrderByDescending(p => p.Price).ToList();
+        }
+        showSorting = false;
+    }
+
+    private void SelectSize(string size)
+    {
+        selectedSize = selectedSize == size ? null : size;
+    }
+
+    private void SelectColor(string color)
+    {
+        selectedColor = selectedColor == color ? null : color;
+    }
+
+    private void SelectCategory(string category)
+    {
+        selectedCategory = selectedCategory == category ? null : category;
+    }
+
+    private void SelectGender(string gender)
+    {
+        selectedGender = selectedGender == gender ? null : gender;
+    }
+
+    private void ApplyFilters()
+    {
+        products = filteredProducts.Where(p =>
+            (string.IsNullOrEmpty(selectedSize) || p.Size.Contains(selectedSize)) &&
+            (string.IsNullOrEmpty(selectedColor) || p.Color.Contains(selectedColor)) &&
+            (string.IsNullOrEmpty(selectedCategory) || p.CategoryName == selectedCategory) &&
+            (string.IsNullOrEmpty(selectedGender) || p.Gender == selectedGender) &&
+            p.Price <= priceRange).ToList();
+
+        showFilter = false;
+    }
+
+    private List<CategoryDTO> FlattenCategories(List<CategoryDTO> categories)
+    {
+        HashSet<string> seenCategories = new HashSet<string>();
+        List<CategoryDTO> flatCategories = new List<CategoryDTO>();
+
+        void Flatten(ChildCategoryDTO category)
+        {
+            if (!seenCategories.Contains(category.CategoryName))
+            {
+                flatCategories.Add(new CategoryDTO
+                    {
+                        CategoryId = category.CategoryId,
+                        CategoryName = category.CategoryName,
+                        ChildCategories = new List<ChildCategoryDTO>()
+                    });
+                seenCategories.Add(category.CategoryName);
+            }
+
+            foreach (var child in category.ChildCategories)
+            {
+                Flatten(child);
+            }
+        }
+
+        foreach (var category in categories)
+        {
+            foreach (var child in category.ChildCategories)
+            {
+                Flatten(child);
+            }
+        }
+
+        return flatCategories;
+    }
+}
