@@ -41,6 +41,10 @@
         NavigationManager.NavigateTo("/add-card");
     }
 
+    void GoToProfilePage() {
+        NavigationManager.NavigateTo("/ProfileMenu");
+    }
+
     void HighlightCard(int id) {
         activeCard = id;
         StateHasChanged();
@@ -157,7 +161,7 @@
 <div class="wrapper">
     <div class="container" id="card-details-input">
         <div class="page-title">
-            <div class="back-arrow">
+            <div class="back-arrow" @onclick="GoToProfilePage">
                 <p>&lt;</p>
             </div>
             <div class="title-text">
