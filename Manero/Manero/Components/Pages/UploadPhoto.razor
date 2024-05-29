@@ -1,0 +1,112 @@
+﻿@using Manero.Components.Models
+@inject HttpClient Http
+@rendermode InteractiveServer
+
+@page "/Upload"
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="card-title">Choose an image</h5>
+                        <a href="/EditProfile" class="btn btn-light" style="width: 70px; height: 30px; border-radius: 10px; display: flex; align-items: center; justify-content: center; padding: 0; background-color: white; color: black; transition: background-color 0.3s ease; border: 1px solid #DBE3F5;" onmouseover="this.style.backgroundColor='lightgray'; this.style.color='white';" onmouseout="this.style.backgroundColor='white'; this.style.color='black';">Back</a>
+                    </div>
+                    <EditForm Model="@imageUpload" OnValidSubmit="HandleFileUpload" enctype="multipart/form-data" FormName="ImageUploadForm">
+                        <InputFile OnChange="@HandleFileChange" @bind-Value="imageUpload.File" />
+
+                        <p class="card-text mt-5">Accepted formats: .jpg, .jpeg, .png</p>
+
+                        <!-- User ID input field -->
+                        <div class="form-group">
+                            <label for="userIdInput">User ID:</label>
+                            <input type="text" class="form-control" id="userIdInput" @bind="imageUpload.UserId" style="width: calc(100% - 90px); display: inline-block; margin-right: 10px;" />
+                        </div>
+
+                        <button type="submit" class="btn btn-primary mt-3">Upload Photo</button>
+                    </EditForm>
+                    @if (!string.IsNullOrEmpty(uploadMessage))
+                    {
+                        <div class="alert alert-info mt-3">@uploadMessage</div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private PostImageModel imageUpload = new PostImageModel();
+    private string uploadMessage;
+
+    private void HandleFileChange(InputFileChangeEventArgs e)
+    {
+        Console.WriteLine("File change event triggered");
+
+        if (e.File != null)
+        {
+            imageUpload.File = e.File;
+            Console.WriteLine($"File selected: {imageUpload.File.Name}, size: {imageUpload.File.Size} bytes");
+        }
+        else
+        {
+            Console.WriteLine("No file selected");
+        }
+    }
+
+    private async Task HandleFileUpload()
+    {
+        Console.WriteLine("Handle file event triggered");
+
+        if (string.IsNullOrEmpty(imageUpload.UserId))
+        {
+            uploadMessage = "User ID not provided.";
+            return;
+        }
+        if (imageUpload.File == null)
+        {
+            uploadMessage = "No file selected.";
+            return;
+        }
+
+        var functionUrl = "https://photo-provider.azurewebsites.net/api/UploadPhoto";
+        var functionKey = "vU6rzzJ1OLqRenYbi4q9jLg4T11t-Qc-9rUGrTcjKkdxAzFug4h8yw==";
+
+        var content = new MultipartFormDataContent();
+        try
+        {
+            content.Add(new StreamContent(imageUpload.File.OpenReadStream()), "file", imageUpload.File.Name);
+            content.Add(new StringContent(imageUpload.UserId), "userId");
+
+            using var http = new HttpClient();
+
+            http.DefaultRequestHeaders.Add("x-functions-key", functionKey);
+
+            foreach (var item in content)
+            {
+                Console.WriteLine($"Content disposition: {item.Headers.ContentDisposition}");
+                Console.WriteLine($"Content type: {item.Headers.ContentType}");
+            }
+
+            var response = await http.PostAsync(functionUrl, content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var responseContent = await response.Content.ReadAsStringAsync();
+                uploadMessage = "Upload successful!";
+            }
+            else
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                uploadMessage = $"Failed to upload image. Status code: {response.StatusCode}. Reason: {response.ReasonPhrase}";
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine("Exception during file upload: " + ex.Message);
+            uploadMessage = $"An error occurred: {ex.Message}";
+        }
+    }
+
+}

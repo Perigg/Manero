@@ -1,0 +1,105 @@
+﻿@using System;
+@using System.Net.Http;
+@using System.Text;
+@using System.Text.Json;
+@using Manero.Components.Models;
+@using Manero.Services;
+
+
+@page "/"
+
+
+
+<div class="container-fluid" style="margin-top: 35px;">
+    <div class="container" style="max-width: 650px;">
+        <nav class="navbar navbar-expand-md navbar-light bg-white" style="padding-top: 40px; padding-bottom: 20px; margin-top: -34px;">
+            <div class="container">
+                <div class="row w-100 d-flex align-items-center justify-content-between">
+                    <div class="col-md-4 col-4 text-left d-flex justify-content-start">
+                        <a href="/UploadPhoto" class="btn btn-light" style="width: 30px; height: 30px; border-radius: 20%; display: flex; align-items: center; justify-content: center; padding: 0; background-color: white; transition: background-color 0.3s ease;" onmouseover="this.style.backgroundColor='lightgray';" onmouseout="this.style.backgroundColor='#F8F8FF';">
+                            <span style="font-size: 20px; color: black;">&lt;</span>
+                        </a>
+                    </div>
+                    <div class="col-md-4 col-4 text-center">
+                        <span class="navbar-brand h4" style="margin: 0px; padding-left: 10px;">Edit Profile</span>
+                    </div>
+                    <div class="col-md-4 col-4 text-right d-flex justify-content-end">
+                        <!-- Placeholder for additional right-aligned content if needed -->
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+
+        <div class="row justify-content-center">
+            <div class="col-md-8 d-flex flex-column align-items-center mt-md-5 mt-1 mb-md-5 mb-1">
+                <div class="text-center position-relative">
+                    <div class="circle" style="width: 240px; border: 5px solid #DBE3F5; border-radius: 50%; position: relative;">
+                        <!-- Placeholder image inside the circle -->
+                        <img src="@photoUrl" class="img-fluid rounded-circle" style="width: 240px; height: 240px; object-fit: cover;">
+                        <!-- Button -->
+                        <a href="/Upload" class="position-absolute btn-circle btn" style="bottom: 12px; right: 24px; width: 36px; height: 36px; border-radius: 50%; border: none; background-color: #DBE3F5;">
+                            <i class="bi bi-camera" style="font-size: 16px; margin-left:18px; color: #495057;"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 mt-3 mb-5">
+                <div class="container-fluid text-center">
+                    <div class="row justify-content-center mt-2 pb-2">
+                        <div class="col-md-12">
+                            <div class="form-group position-relative mb-3 mx-auto" style="width: 80%;">
+                                <label for="name" style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 8px; color: lightgray;">Name</label>
+                                <input type="text" id="name" class="form-control" style="border-radius: 20px; border: 1px solid #DBE3F5; width: 100%; padding: 23px;" placeholder="Carl Gustaf Folke Hubertus">
+                            </div>
+                            <div class="form-group position-relative mb-3 mx-auto" style="width: 80%;">
+                                <label for="email" style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 8px; color: lightgray;">Email</label>
+                                <input type="text" id="email" class="form-control" style="border-radius: 20px; border: 1px solid #DBE3F5; width: 100%; padding: 23px;" placeholder="Kungen@gmail.com">
+                            </div>
+                            <div class="form-group position-relative mb-3 mx-auto" style="width: 80%;">
+                                <label for="phone" style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 8px; color: lightgray;">Phone number</label>
+                                <input type="text" id="phone" class="form-control" style="border-radius: 20px; border: 1px solid #DBE3F5; width: 100%; padding: 23px;" placeholder="123456789">
+                            </div>
+                            <div class="form-group position-relative mb-3 mx-auto" style="width: 80%;">
+                                <label for="location" style="position: absolute; top: -10px; left: 10px; background-color: white; padding: 0 8px; color: lightgray;">Location</label>
+                                <input type="text" id="location" class="form-control" style="border-radius: 20px; border: 1px solid #DBE3F5; width: 100%; padding: 23px;" placeholder="Drottningholm">
+                            </div>
+                            <button type="button" class="btn btn-dark btn-block mx-auto" style="border-radius: 20px; color: white; width: 80%; background-color: black; transition: background-color 0.3s ease;" onmouseover="this.style.backgroundColor='#333';" onmouseout="this.style.backgroundColor='black';">SAVE CHANGES</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+@code {
+    private string photoUrl;
+    private PhotoService _photoService { get; set; }
+    private string uploadMessage;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        _photoService = new PhotoService(new HttpClient());
+        await GetUserPhoto();
+        //await GetUserInfo();
+    }
+
+    private async Task GetUserPhoto()
+    {
+        try
+        {
+            int userId = 1;
+            photoUrl = await _photoService.GetUserPhotoUrlAsync(userId);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"An error occurred: {ex.Message}");
+            photoUrl = "error.jpg";
+        }
+    }
+}
