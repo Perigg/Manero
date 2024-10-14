@@ -1,5 +1,5 @@
 
-![Alt text](https://github.com/Perigg/Manero/blob/master/order.png) ![Alt text](https://github.com/Perigg/Manero/blob/master/cart.png)![Alt text](https://github.com/Perigg/Manero/blob/master/checkout.png)
+
 
 
 # Manero
@@ -9,6 +9,8 @@ Detta projekt är ett grupparbete där målet är att bygga en webbutik med anv�
 ## Microservices
 
 Varje service hanterar olika aspekter av affärslogiken och de är byggda för att fungera tillsammans för att hantera användarens köpprocess från start till slut. Alla microservices har deployats i Azure, vilket möjliggör skalbarhet och flexibilitet i hanteringen av webbutikens olika funktioner.
+
+![Alt text](https://github.com/Perigg/Manero/blob/master/order.png) ![Alt text](https://github.com/Perigg/Manero/blob/master/cart.png)![Alt text](https://github.com/Perigg/Manero/blob/master/checkout.png)
 
 ### Cart Service
 
