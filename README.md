@@ -1,7 +1,5 @@
 
-![Alt text](https://github.com/Perigg/Manero/blob/master/order.png) 
-![Alt text](https://github.com/Perigg/Manero/blob/master/cart.png)
-![Alt text](https://github.com/Perigg/Manero/blob/master/checkout.png)
+![Alt text](https://github.com/Perigg/Manero/blob/master/order.png) ![Alt text](https://github.com/Perigg/Manero/blob/master/cart.png)![Alt text](https://github.com/Perigg/Manero/blob/master/checkout.png)
 
 
 # Manero
